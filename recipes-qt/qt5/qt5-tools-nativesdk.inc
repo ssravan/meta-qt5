@@ -15,8 +15,8 @@ EXTRA_OECONF = "-prefix ${prefix} \
                 -verbose -release -static \
                 -platform ${TARGET_OS}-oe-g++ \
                 -xplatform ${TARGET_OS}-oe-g++ \
-                -arch ${@qt_arch(d)} \
-			          ${@qt_endian(d)} \
+                -arch ${@qt5_arch(d)} \
+                ${@qt5_endian(d)} \
                 -host-little-endian \
                 -no-xcb -no-wayland \
                 -I${STAGING_DIR_HOST}${SDKPATHNATIVE}/usr/include/dbus-1.0 \

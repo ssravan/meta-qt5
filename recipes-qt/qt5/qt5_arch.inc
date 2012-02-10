@@ -2,7 +2,7 @@ inherit siteinfo
 
 ARM_INSTRUCTION_SET = "arm"
 
-def qt_arch(d):
+def qt5_arch(d):
     import bb, re
     arch = d.getVar('TARGET_ARCH', 1)
     if re.match("^i.86$", arch):
@@ -15,7 +15,7 @@ def qt_arch(d):
         arch = "mips"
     return arch
 
-def qt_endian(d):
+def qt5_endian(d):
     import bb
     if d.getVar('SITEINFO_ENDIANNESS', True) == "le":
         return "-little-endian"
