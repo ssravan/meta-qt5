@@ -7,7 +7,7 @@ FILESEXTRAPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
 
 inherit nativesdk qmake2
 
-require qt5_base.inc
+require qtbase.inc
 require qt5_arch.inc
 
 EXTRA_OECONF = "-prefix ${prefix} \
