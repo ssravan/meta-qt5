@@ -1,14 +1,13 @@
+require qtbase.inc
+require qt5_arch.inc
+
 DESCRIPTION = "SDK tools for Qt version 5.x"
-DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk jpeg-nativesdk png-nativesdk qt5-tools-native"
+DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
 INC_PR = "r1"
-FILESEXTRAPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
 
 inherit nativesdk qmake2
-
-require qtbase.inc
-require qt5_arch.inc
 
 EXTRA_OECONF = "-prefix ${prefix} \
                 -nomake libs -nomake examples -nomake tests \
