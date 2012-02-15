@@ -1,5 +1,4 @@
 inherit qmake2
-#inherit qmake_base
 
 DEPENDS += "qt5-tools-native freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -212,24 +211,25 @@ do_configure() {
 
   ./configure -v \
       -opensource -confirm-license \
-			-prefix ${prefix}/ \
-			-bindir ${bindir} \
-			-libdir ${libdir} \
-			-datadir ${datadir}/${QT_DIR_NAME} \
-			-sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
-			-docdir ${docdir}/${QT_DIR_NAME} \
-			-headerdir ${includedir}/${QT_DIR_NAME} \
-			-plugindir ${libdir}/${QT_DIR_NAME}/plugins \
-			-importdir ${libdir}/${QT_DIR_NAME}/imports \
-			-translationdir ${datadir}/${QT_DIR_NAME}/translations \
-			-examplesdir ${bindir}/${QT_DIR_NAME}/examples \
-			-platform ${TARGET_OS}-oe-g++ \
-			-xplatform ${TARGET_OS}-oe-g++ \
-			${QT_ENDIAN} \
-			-arch ${QT_ARCH} \
-			${QT_CONFIG_FLAGS} -no-fast \
-			-L${STAGING_LIBDIR} -I${STAGING_INCDIR} \
-			-I${STAGING_INCDIR}/freetype2
+      -nomake tests \
+      -prefix ${prefix}/ \
+      -bindir ${bindir} \
+      -libdir ${libdir} \
+      -datadir ${datadir}/${QT_DIR_NAME} \
+      -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
+      -docdir ${docdir}/${QT_DIR_NAME} \
+      -headerdir ${includedir}/${QT_DIR_NAME} \
+      -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
+      -importdir ${libdir}/${QT_DIR_NAME}/imports \
+      -translationdir ${datadir}/${QT_DIR_NAME}/translations \
+      -examplesdir ${bindir}/${QT_DIR_NAME}/examples \
+      -platform ${TARGET_OS}-oe-g++ \
+      -xplatform ${TARGET_OS}-oe-g++ \
+      ${QT_ENDIAN} \
+      -arch ${QT_ARCH} \
+      ${QT_CONFIG_FLAGS} -no-fast \
+      -L${STAGING_LIBDIR} -I${STAGING_INCDIR} \
+      -I${STAGING_INCDIR}/freetype2
 }
 
 python populate_packages_prepend() {
