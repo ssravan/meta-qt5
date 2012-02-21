@@ -18,10 +18,6 @@ SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git \
            file://linux.conf"
 S = "${WORKDIR}/git"
 
-#           file://0009-support-2bpp.patch
-#           file://0001-Added-Openembedded-crossarch-option.patch
-#           file://fix-translations.patch
-
 FILES_${QT_BASE_NAME}-tools_append = " ${bindir}/qml ${bindir}/qmlplugindump"
 FILES_${QT_BASE_NAME}-tools-dbg_append = " ${bindir}/.debug/qml ${bindir}/.debug/qmlplugindump"
 
