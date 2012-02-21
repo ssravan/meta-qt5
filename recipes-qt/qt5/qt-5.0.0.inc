@@ -8,11 +8,6 @@ FILESEXTRAPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
 
 SRCREV = "805d8959787ba03a35436e1235648d01bdfd91c7"
 SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git \
-           file://0004-no-qmake.patch \
-           file://hack-out-pg2-4.7.0.patch \
-           file://0006-freetype-host-includes.patch \
-           file://add_nostrip_for_debug_packages.diff \
-           file://qmake_cxx_eval.patch \
            file://g++-base.conf \
            file://gcc-base.conf \
            file://linux.conf"
