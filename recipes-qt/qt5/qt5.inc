@@ -185,58 +185,62 @@ FILES_${QT_BASE_NAME}-qml-plugins          = "${libdir}/${QT_DIR_NAME}/imports/*
 FILES_${QT_BASE_NAME}-qml-plugins-dbg      = "${libdir}/${QT_DIR_NAME}/imports/*/*/*/.debug/* ${libdir}/${QT_DIR_NAME}/imports/*/.debug ${libdir}/${QT_DIR_NAME}/plugins/qmltooling/.debug"
 
 do_configure() {
-	unset QMAKESPEC
-	unset QTDIR
+    unset QMAKESPEC
+    unset QTDIR
 
-	if [ ! -e bin/qmake ]; then
-		ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 bin/qmake
-	fi
+    if [ ! -e bin/qmake ]; then
+        pushd bin
+        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 qmake
+        popd
+    fi
 
-	if [ ! -e mkspecs/${TARGET_OS}-oe-g++ ]; then
-		ln -sf linux-g++ mkspecs/${TARGET_OS}-oe-g++
-	fi
+    if [ ! -e mkspecs/${TARGET_OS}-oe-g++ ]; then
+        pushd mkspecs
+		    ln -sf linux-g++ ${TARGET_OS}-oe-g++
+        popd
+    fi
 
-  cp -f ${WORKDIR}/g++-base.conf mkspecs/common/g++-base.conf
-  cp -f ${WORKDIR}/gcc-base.conf mkspecs/common/gcc-base.conf
-	cp -f ${WORKDIR}/linux.conf mkspecs/common/
+    cp -f ${WORKDIR}/g++-base.conf mkspecs/common/g++-base.conf
+    cp -f ${WORKDIR}/gcc-base.conf mkspecs/common/gcc-base.conf
+	  cp -f ${WORKDIR}/linux.conf mkspecs/common/
 
-	echo "[Paths]"                                 > $QT_CONF_PATH
-	echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
-	echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
-	echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
-	echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
-	echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
-	echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
-	echo "Imports=${libdir}/${QT_DIR_NAME}/imports" >> $QT_CONF_PATH
-	echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
-	echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
-	echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
-	echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
-	echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
-
-	${EXTRA_QMAKE_MUNGE}|| true
-
-  ./configure -v \
-      -opensource -confirm-license \
-      -nomake tests \
-      -prefix ${prefix}/ \
-      -bindir ${bindir} \
-      -libdir ${libdir} \
-      -datadir ${datadir}/${QT_DIR_NAME} \
-      -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
-      -docdir ${docdir}/${QT_DIR_NAME} \
-      -headerdir ${includedir}/${QT_DIR_NAME} \
-      -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
-      -importdir ${libdir}/${QT_DIR_NAME}/imports \
-      -translationdir ${datadir}/${QT_DIR_NAME}/translations \
-      -examplesdir ${bindir}/${QT_DIR_NAME}/examples \
-      -platform ${TARGET_OS}-oe-g++ \
-      -xplatform ${TARGET_OS}-oe-g++ \
-      ${QT_ENDIAN} \
-      -arch ${QT_ARCH} \
-      ${QT_CONFIG_FLAGS} -no-fast \
-      -L${STAGING_LIBDIR} -I${STAGING_INCDIR} \
-      -I${STAGING_INCDIR}/freetype2
+    echo "[Paths]"                                 > $QT_CONF_PATH
+    echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
+    echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
+    echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
+    echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
+    echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
+    echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
+    echo "Imports=${libdir}/${QT_DIR_NAME}/imports" >> $QT_CONF_PATH
+    echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
+    echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
+    echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
+    echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
+    echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
+    
+    ${EXTRA_QMAKE_MUNGE}|| true
+    
+    ./configure -v \
+        -opensource -confirm-license \
+        -nomake tests \
+        -prefix ${prefix}/ \
+        -bindir ${bindir} \
+        -libdir ${libdir} \
+        -datadir ${datadir}/${QT_DIR_NAME} \
+        -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
+        -docdir ${docdir}/${QT_DIR_NAME} \
+        -headerdir ${includedir}/${QT_DIR_NAME} \
+        -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
+        -importdir ${libdir}/${QT_DIR_NAME}/imports \
+        -translationdir ${datadir}/${QT_DIR_NAME}/translations \
+        -examplesdir ${bindir}/${QT_DIR_NAME}/examples \
+        -platform ${TARGET_OS}-oe-g++ \
+        -xplatform ${TARGET_OS}-oe-g++ \
+        ${QT_ENDIAN} \
+        -arch ${QT_ARCH} \
+        ${QT_CONFIG_FLAGS} -no-fast \
+        -L${STAGING_LIBDIR} -I${STAGING_INCDIR} \
+        -I${STAGING_INCDIR}/freetype2
 }
 
 python populate_packages_prepend() {
@@ -282,20 +286,22 @@ python populate_packages_prepend() {
                 d.setVar('PACKAGES', packages)
 
         qtopia_split('accessible',    'accessible',    '^libq(.*)\.so$')
+        qtopia_split('bearer',        'bearer',        '^libq(.*)bearer\.so$')
         qtopia_split('codecs',        'codec',         '^libq(.*)\.so$')
         qtopia_split('decorations',   'decoration',    '^libqdecoration(.*)\.so$')
         qtopia_split('designer',      'designer',      '^lib(.*)\.so$')
+        qtopia_split('generic',       'generic',       '^libq(.*)\.so$')
         qtopia_split('gfxdrivers',    'gfxdriver',     '^libq(.*)\.so$')
         qtopia_split('graphicssystems','graphicssystems', '^libq(.*)\.so$')
         qtopia_split('mousedrivers',  'mousedriver',   '^libq(.*)mousedriver\.so$')
         qtopia_split('iconengines',   'iconengine',    '^libq(.*)\.so$')
         qtopia_split('imageformats',  'imageformat',   '^libq(.*)\.so$')
         qtopia_split('inputmethods',  'inputmethod',   '^libq(.*)\.so$')
+        qtopia_split('platforms',     'platforms',     '^lib(.*)\.so$')
         qtopia_split('sqldrivers',    'sqldriver',     '^libq(.*)\.so$')
         qtopia_split('script',        'script',        '^libqtscript(.*)\.so$')
         qtopia_split('styles',        'style',         '^libq(.*)\.so$')
         qtopia_split('phonon_backend','phonon-backend','^libphonon_(.*)\.so$')
-        qtopia_split('bearer',        'bearer',        '^libq(.*)bearer\.so$')
 }
 
 do_install() {

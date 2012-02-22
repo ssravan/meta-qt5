@@ -5,7 +5,7 @@ HOMEPAGE = "http://qt.nokia.com"
 SECTION = "x11/libs"
 DEPENDS += "virtual/libgl virtual/libx11 fontconfig libxft libxext libxrender libxrandr libxcursor"
 
-INC_PR = "r1"
+INC_PR = "r2"
 
 QT_GLFLAGS ?= "${@base_contains('DISTRO_FEATURES', 'opengl', '-opengl', '-no-opengl', d)} "
 QT_GLFLAGS_qemux86 = "-opengl"
@@ -21,7 +21,7 @@ do_install_append() {
     -e 's#Iin#I${in#g' \
     ${D}${libdir}/*.la ${D}${libdir}/*.prl ${D}${libdir}/pkgconfig/*.pc
 
-  # QT abuses $includedir to point to its headers, which breaks pkgconfig sysroot, so
+  # Qt abuses $includedir to point to its headers, which breaks pkgconfig sysroot, so
   # manually fix it up here:
   for pc in ${D}${libdir}/pkgconfig/*.pc ; do
     sed -i -e "s:prefix}include/${QT_BASE_NAME}/$(basename $pc .pc):prefix}/include:" \
