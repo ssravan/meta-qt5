@@ -2,6 +2,7 @@ inherit qmake2
 
 DEPENDS += "qt5-tools-native freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 DEPENDS += "libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
+RDEPENDS += "libx11-xcb libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
 
 require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"
