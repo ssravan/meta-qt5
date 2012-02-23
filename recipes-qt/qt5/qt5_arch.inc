@@ -10,7 +10,7 @@ def qt5_arch(d):
     elif re.match("^arm.*", arch):
         arch = "arm"
     elif arch == "x86_64":
-        arch = "x86"
+        arch = "x86_64"
     elif arch == "mipsel":
         arch = "mips"
     return arch

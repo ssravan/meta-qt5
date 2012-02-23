@@ -1,0 +1,15 @@
+--- qtbase/configure~	2012-02-09 10:38:39.000000000 +0100
++++ qtbase/configure	2012-02-13 16:41:47.000000000 +0100
+@@ -7443,9 +7443,9 @@ QT_BUILD_TREE = \$\$quote($outpath)
+ QT_BUILD_PARTS = $CFG_BUILD_PARTS
+ 
+ #local paths that cannot be queried from the QT_INSTALL_* properties while building QTDIR
+-QMAKE_MOC        = \$\$QT_BUILD_TREE/bin/moc
+-QMAKE_UIC        = \$\$QT_BUILD_TREE/bin/uic
+-QMAKE_RCC        = \$\$QT_BUILD_TREE/bin/rcc
++QMAKE_MOC        = \${OE_QMAKE_MOC}
++QMAKE_UIC        = \${OE_QMAKE_UIC}
++QMAKE_RCC        = \${OE_QMAKE_RCC}
+ QMAKE_INCDIR_QT  = \$\$QT_BUILD_TREE/include
+ QMAKE_LIBDIR_QT  = \$\$QT_BUILD_TREE/lib
+ 

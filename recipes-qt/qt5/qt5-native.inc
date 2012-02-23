@@ -11,6 +11,8 @@ inherit native
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://LICENSE.LGPL;md5=cc5963be04f8b19c3e3c46bc31f0f6e1"
 
+FILESEXTRAPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
+
 SRCREV = "805d8959787ba03a35436e1235648d01bdfd91c7"
 SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git \
            file://qt-config.patch \
@@ -45,21 +47,6 @@ do_configure() {
   ./configure ${EXTRA_OECONF} || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
 }
 
-TOBUILD = "\
-  src/tools/moc \
-  src/corelib \
-  src/sql \
-  src/xml \
-  src/network \
-  src/tools/uic \
-  src/tools/rcc \
-  src/xmlpatterns \
-  src/dbus \
-  src/gui \
-  src/testlib \
-  src/tools/uic3 \
-"
-
 do_compile() {
   oe_runmake CC="${CC}" CXX="${CXX}"
 }
@@ -78,8 +65,5 @@ do_install() {
 	cp -f ${WORKDIR}/gcc-base.conf ${D}${datadir}/qt5/mkspecs/common/gcc-base.conf
 	cp -f ${WORKDIR}/linux.conf ${D}${datadir}/qt5/mkspecs/common/
 
-#	for i in ${TOBUILD}; do
-#		cd ${S}/$i && oe_runmake install INSTALL_ROOT=${D}
-#	done
   oe_runmake install INSTALL_ROOT=${D}
 }

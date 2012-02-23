@@ -1,15 +1,21 @@
-require qtbase.inc
+require qt5-native.inc
 require qt5_arch.inc
 
 DESCRIPTION = "SDK tools for Qt version 5.x"
 DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
-INC_PR = "r1"
+INC_PR = "r2"
 
 inherit nativesdk qmake2
 
-EXTRA_OECONF = "-prefix ${prefix} \
+SRC_URI += "file://configure-lflags.patch \
+            file://qmake-exists-check.patch \
+            file://configure-paths.patch \
+            file://qt-dbus-const.patch"
+
+EXTRA_OECONF = "-opensource -confirm-license \
+                -prefix ${prefix} \
                 -nomake libs -nomake examples -nomake tests \
                 -verbose -release -static \
                 -platform ${TARGET_OS}-oe-g++ \
@@ -30,24 +36,30 @@ do_configure() {
     unset LD
 
     if [ ! -e mkspecs/${TARGET_OS}-oe-g++ ]; then
-        ln -sf linux-g++ mkspecs/${TARGET_OS}-oe-g++
+        pushd mkspecs
+        ln -sf linux-g++ ${TARGET_OS}-oe-g++
+        popd
     fi
 
-    cp ../g++.conf mkspecs/common
-    cp ../linux.conf mkspecs/common
+    cp -f ${WORKDIR}/g++-base.conf mkspecs/common/g++-base.conf
+    cp -f ${WORKDIR}/gcc-base.conf mkspecs/common/gcc-base.conf
+    cp -f ${WORKDIR}/linux.conf mkspecs/common/
+
     # don't use host g++ even during configure
     sed -i -e "s#g++#${CXX}#" mkspecs/common/g++-base.conf
     sed -i -e "s#gcc#${CC}#" mkspecs/common/g++-base.conf
 
     # first launch configure to get qmake compiled for the nativesdk
-    (echo o; echo yes) | CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} || true
+    CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} || true
 
     # then backup the binary and start again with a qmake which can run on the build host
     mv bin/qmake bin/qmake_nativesdk
     if [ ! -e bin/qmake ]; then
-        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 bin/qmake
+        pushd bin
+        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 qmake
+        popd
     fi
-    (echo o; echo yes) | CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} \
+    CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} \
         || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
 }
 
@@ -59,7 +71,7 @@ TOBUILD = "\
 "
 
 do_compile() {
-    ${S}/bin/qmake && oe_runmake CC="${CC}" CXX="${CXX}"
+    oe_runmake CC="${CC}" CXX="${CXX}"
 }
 
 do_install() {

@@ -1,8 +1,6 @@
 inherit qmake2
 
 DEPENDS += "qt5-tools-native freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
-DEPENDS += "libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
-RDEPENDS += "libx11-xcb libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
 
 require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"
@@ -14,6 +12,7 @@ QT_DISTRO_FLAGS_linuxstdbase = "-sm"
 QT_SQL_DRIVER_FLAGS ?= "-no-sql-ibase -no-sql-mysql -no-sql-psql -no-sql-odbc -plugin-sql-sqlite"
 
 QT_GLFLAGS ?= ""
+QT_BASE_LIB ?= "libqt"
 
 QT_CONFIG_FLAGS += "-reduce-relocations \
                     -shared -no-nas-sound -no-nis \
@@ -40,9 +39,6 @@ export QT_CONF_PATH="${WORKDIR}/qt.conf"
 QT_LIB_NAMES = "QtCore QtDBus QtDesigner QtDesignerComponents QtGui QtWidgets QtHelp QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml QtXmlPatterns QtOpenVG QtDeclarative"
 
 QT_EXTRA_LIBS = "pvrQWSWSEGL"
-
-# XXX: hw: WTF??
-QT_BASE_LIB ?= "libqt"
 
 python __anonymous () {
     import bb

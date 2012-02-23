@@ -3,14 +3,15 @@ require qt5.inc
 DESCRIPTION = "Qt is a cross-platform application framework"
 HOMEPAGE = "http://qt.nokia.com"
 SECTION = "x11/libs"
-DEPENDS += "virtual/libgl virtual/libx11 fontconfig libxft libxext libxrender libxrandr libxcursor"
 
 INC_PR = "r2"
 
-QT_GLFLAGS ?= "${@base_contains('DISTRO_FEATURES', 'opengl', '-opengl', '-no-opengl', d)} "
-QT_GLFLAGS_qemux86 = "-opengl"
-QT_GLFLAGS_qemuppc = "-opengl"
-QT_CONFIG_FLAGS += "-no-xinerama -no-xkb"
+DEPENDS += "virtual/libgl virtual/libx11 \
+             fontconfig libxft libxext libxrender libxrandr libxcursor \
+             libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
+RDEPENDS += "libx11-xcb libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
+
+QT_CONFIG_FLAGS += "-xcb -no-xinerama -no-xkb"
 QT_BASE_LIB  ?= "libqt"
 
 inherit qt5x11
