@@ -36,7 +36,7 @@ EXTRA_ENV = 'QMAKE="${STAGING_BINDIR_NATIVE}/qmake2 -after \
 export QT_CONF_PATH="${WORKDIR}/qt.conf"
 
 # Library packages
-QT_LIB_NAMES = "QtCore QtDBus QtDesigner QtDesignerComponents QtGui QtWidgets QtHelp QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml QtXmlPatterns QtOpenVG QtDeclarative"
+QT_LIB_NAMES = "QtCore QtDBus QtDesigner QtDesignerComponents QtGui QtWidgets QtHelp QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml QtOpenVG"
 
 QT_EXTRA_LIBS = "pvrQWSWSEGL"
 
@@ -106,7 +106,6 @@ OTHER_PACKAGES = "\
              ${QT_BASE_NAME}-mkspecs \
              ${QT_BASE_NAME}-pixeltool \
              ${QT_BASE_NAME}-qmlviewer \
-             ${QT_BASE_NAME}-xmlpatterns \
              ${QT_BASE_NAME}-qml-plugins"
 
 #We prepend so ${QT_BASE_NAME}-demos-doc comes before ${PN}-doc,so the packaging of FILES_ get done before.
@@ -176,8 +175,6 @@ FILES_${QT_BASE_NAME}-qmlviewer-dbg        = "${bindir}/.debug/qmlviewer"
 FILES_${QT_BASE_NAME}-makeqpf              = "${bindir}/makeqpf"
 FILES_${QT_BASE_NAME}-makeqpf-dbg          = "${bindir}/.debug/makeqpf"
 FILES_${QT_BASE_NAME}-mkspecs              = "${datadir}/${QT_DIR_NAME}/mkspecs/*"
-FILES_${QT_BASE_NAME}-xmlpatterns          = "${bindir}/xmlpatterns*"
-FILES_${QT_BASE_NAME}-xmlpatterns-dbg      = "${bindir}/.debug/xmlpatterns*"
 FILES_${QT_BASE_NAME}-qml-plugins          = "${libdir}/${QT_DIR_NAME}/imports/* ${libdir}/${QT_DIR_NAME}/plugins/qmltooling/*"
 FILES_${QT_BASE_NAME}-qml-plugins-dbg      = "${libdir}/${QT_DIR_NAME}/imports/*/*/*/.debug/* ${libdir}/${QT_DIR_NAME}/imports/*/.debug ${libdir}/${QT_DIR_NAME}/plugins/qmltooling/.debug"
 
@@ -304,6 +301,11 @@ python populate_packages_prepend() {
 do_install() {
 	oe_runmake install INSTALL_ROOT=${D}
 
+	install -d ${D}/${libdir}/fonts
+	touch ${D}/${libdir}/fonts/fontdir
+}
+
+do_install_append() {
 	# These are host binaries, we should only use them in staging
 	rm ${D}/${bindir}/qmake
 
@@ -335,11 +337,15 @@ do_install() {
 				-e 's:IP{:I${:g' $pc
 	done
 
-	install -d ${D}/${libdir}/fonts
-	touch ${D}/${libdir}/fonts/fontdir
-
-	#Append an E to the qtdemo file
-	if [ -n "${QT_LIBINFIX}" ] ; then
-		[ -f ${D}${bindir}/qtdemo ] && mv ${D}${bindir}/qtdemo ${D}${bindir}/qtdemo${QT_LIBINFIX}
-	fi
+  # Avoid using the paths built into the qmake binary as these are not correct 
+  # when cross-compiling
+  sed -i                                                                         \
+      -e 's#$$\[QT_INSTALL_PREFIX]#${STAGING_DIR}#g'                             \
+      -e 's#$$\[QT_INSTALL_HEADERS]#${STAGING_INCDIR}/${QT_DIR_NAME}#g'          \
+      -e 's#$$\[QT_INSTALL_DATA]#${STAGING_DATADIR}/${QT_DIR_NAME}#g'            \
+      -e 's#$$\[QT_INSTALL_LIBS]#${STAGING_LIBDIR}#g'                            \
+      -e 's#$$\[QT_INSTALL_PLUGINS]#${STAGING_LIBDIR}/${QT_DIR_NAME}/plugins#g'  \
+      -e 's#$$\[QT_INSTALL_IMPORTS]#${STAGING_LIBDIR}/${QT_DIR_NAME}/imports#g'  \
+      ${D}${datadir}/${QT_DIR_NAME}/mkspecs/features/*.prf
 }
+

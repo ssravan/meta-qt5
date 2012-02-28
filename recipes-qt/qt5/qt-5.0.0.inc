@@ -4,13 +4,12 @@ LIC_FILES_CHKSUM = "file://LICENSE.LGPL;md5=cc5963be04f8b19c3e3c46bc31f0f6e1"
 FILESPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
 FILESEXTRAPATHS =. "${FILE_DIRNAME}/qt-${PV}:"
 
-SRCREV = "805d8959787ba03a35436e1235648d01bdfd91c7"
+SRCREV = "636e5c5d64479754b9d8d262bba64773e3b5cf93"
 SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git \
            file://0004-no-qmake.patch \
            file://hack-out-pg2-4.7.0.patch \
            file://0006-freetype-host-includes.patch \
            file://add_nostrip_for_debug_packages.diff \
-           file://qmake_cxx_eval.patch \
            file://g++-base.conf \
            file://gcc-base.conf \
            file://linux.conf"
