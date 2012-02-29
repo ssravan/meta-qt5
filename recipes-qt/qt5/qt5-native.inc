@@ -4,7 +4,7 @@ SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
 PROVIDES = "qt5-tools-native"
 
-INC_PR = "r1"
+INC_PR = "r2"
 
 inherit native
 
@@ -34,6 +34,7 @@ EXTRA_OECONF = "-prefix ${prefix} \
                 -no-cups -no-nas-sound -no-nis -no-openssl \
                 -no-freetype -no-glib -no-iconv \
                 -static \
+                -no-xcb -no-wayland \
                 -verbose -release \
                 -no-fast -silent -no-rpath"
 
