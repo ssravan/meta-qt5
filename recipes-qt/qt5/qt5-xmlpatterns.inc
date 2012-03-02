@@ -27,8 +27,6 @@ do_configure () {
 do_compile () {
     QTDIR="${QMAKESPEC}/../.." qmake2
     oe_runmake CC="${CC}" CXX="${CXX}"
-
-    echo "FILES: ${FILES_qt5-xmlpatterns}"
 }
 
 do_install() {
