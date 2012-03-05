@@ -336,16 +336,5 @@ do_install_append() {
 		sed -i -e "s:prefix}include/${QT_DIR_NAME}/$(basename $pc .pc):prefix}/include:" \
 				-e 's:IP{:I${:g' $pc
 	done
-
-  # Avoid using the paths built into the qmake binary as these are not correct 
-  # when cross-compiling
-  sed -i                                                                         \
-      -e 's#$$\[QT_INSTALL_PREFIX]#${STAGING_DIR}#g'                             \
-      -e 's#$$\[QT_INSTALL_HEADERS]#${STAGING_INCDIR}/${QT_DIR_NAME}#g'          \
-      -e 's#$$\[QT_INSTALL_DATA]#${STAGING_DATADIR}/${QT_DIR_NAME}#g'            \
-      -e 's#$$\[QT_INSTALL_LIBS]#${STAGING_LIBDIR}#g'                            \
-      -e 's#$$\[QT_INSTALL_PLUGINS]#${STAGING_LIBDIR}/${QT_DIR_NAME}/plugins#g'  \
-      -e 's#$$\[QT_INSTALL_IMPORTS]#${STAGING_LIBDIR}/${QT_DIR_NAME}/imports#g'  \
-      ${D}${datadir}/${QT_DIR_NAME}/mkspecs/features/*.prf
 }
 
