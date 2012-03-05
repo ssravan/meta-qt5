@@ -3,22 +3,20 @@ DEPENDS = "qt5-x11-free"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1;md5=1a6d268fd218675ffea8be556788b780"
 
-PR = "r2"
+PR = "r3"
 
 inherit qt5x11
 
-name = "QtXmlPatterns"
-ALLOW_EMPTY_${PN} = "0"
-FILES_${PN} = "${libdir}/lib${name}.so.*"
+FILES_${PN} = "${libdir}/*.so.*"
 FILES_${PN}-dev = "\
-    ${libdir}/lib${name}.prl                        \
-    ${libdir}/lib${name}.a                          \
-    ${libdir}/lib${name}.la                         \
-    ${libdir}/lib${name}.so                         \
+    ${libdir}/*.prl                                 \
+    ${libdir}/*.a                                   \
+    ${libdir}/*.la                                  \
+    ${libdir}/*.so                                  \
     ${includedir}/${QT_DIR_NAME}/${name}            \
-    ${libdir}/pkgconfig/${name}.pc                  \
+    ${libdir}/pkgconfig/*.pc                        \
 "
-FILES_${PN}-dbg = "${libdir}/.debug/lib${name}.so* ${exec_prefix}/src/debug/"
+FILES_${PN}-dbg = "${libdir}/.debug/*.so* ${exec_prefix}/src/debug/"
 
 do_configure () {
     :

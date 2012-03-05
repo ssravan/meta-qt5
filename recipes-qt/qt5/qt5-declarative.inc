@@ -7,17 +7,16 @@ PR = "r2"
 
 inherit qt5x11
 
-name = "QtDeclarative"
-FILES_${PN} = "${libdir}/lib${name}.so.*"
+FILES_${PN} = "${libdir}/*.so.*"
 FILES_${PN}-dev = "\
-    ${libdir}/lib${name}.prl                        \
-    ${libdir}/lib${name}.a                          \
-    ${libdir}/lib${name}.la                         \
-    ${libdir}/lib${name}.so                         \
+    ${libdir}/*.prl                                 \
+    ${libdir}/*.a                                   \
+    ${libdir}/*.la                                  \
+    ${libdir}/*.so                                  \
     ${includedir}/${QT_DIR_NAME}/${name}            \
-    ${libdir}/pkgconfig/${name}.pc                  \
+    ${libdir}/pkgconfig/*.pc                        \
 "
-FILES_${PN}-dbg = "${libdir}/.debug/lib${name}.so* ${exec_prefix}/src/debug/"
+FILES_${PN}-dbg = "${libdir}/.debug/*.so* ${exec_prefix}/src/debug/"
 
 do_configure () {
     :
@@ -31,6 +30,7 @@ do_compile () {
 do_install() {
     sed -i -e 's#$(INSTALL_ROOT)${STAGING_DIR}/${MACHINE}#$(INSTALL_ROOT)#g' \
         $(find . -name Makefile)
+
     oe_runmake install INSTALL_ROOT="${D}"
 }
 
