@@ -1,0 +1,16 @@
+diff --git a/src/3rdparty/v8/src/platform-linux.cc b/src/3rdparty/v8/src/platform-linux.cc
+index 451f6fc..f72e7cc 100644
+--- a/src/3rdparty/v8/src/platform-linux.cc
++++ b/src/3rdparty/v8/src/platform-linux.cc
+@@ -96,9 +96,9 @@ void OS::Setup() {
+ #endif
+   } else {
+ #if USE_EABI_HARDFLOAT
+-    PrintF("ERROR: Binary not compiled with -mfloat-abi=hard but with "
++    PrintF("WARNING: Binary not compiled with -mfloat-abi=hard but with "
+            "-DUSE_EABI_HARDFLOAT\n");
+-    exit(1);
++    //exit(1);
+ #endif
+   }
+ #endif
