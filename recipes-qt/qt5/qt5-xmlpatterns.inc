@@ -7,16 +7,10 @@ PR = "r3"
 
 inherit qt5x11
 
-FILES_${PN} = "${libdir}/*.so.*"
-FILES_${PN}-dev = "\
-    ${libdir}/*.prl                                 \
-    ${libdir}/*.a                                   \
-    ${libdir}/*.la                                  \
-    ${libdir}/*.so                                  \
+FILES_${PN}-dev += "\
     ${includedir}/${QT_DIR_NAME}/${name}            \
-    ${libdir}/pkgconfig/*.pc                        \
 "
-FILES_${PN}-dbg = "${libdir}/.debug/*.so* ${exec_prefix}/src/debug/"
+FILES_${PN}-dbg += "${exec_prefix}/src/debug/"
 
 do_configure () {
     :
@@ -28,8 +22,11 @@ do_compile () {
 }
 
 do_install() {
-    sed -i -e 's#$(INSTALL_ROOT)${STAGING_DIR}/${MACHINE}#$(INSTALL_ROOT)#g' \
+    sed -i                                                          \
+        -e 's#$(INSTALL_ROOT)${STAGING_DIR}/${MACHINE}#$(INSTALL_ROOT)#g' \
+        -e 's#$(INSTALL_ROOT)${STAGING_DIR}/${BUILD_SYS}#$(INSTALL_ROOT)#g' \
         $(find . -name Makefile)
+
     oe_runmake install INSTALL_ROOT="${D}"
 }
 

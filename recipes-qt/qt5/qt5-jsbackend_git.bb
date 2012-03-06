@@ -6,5 +6,5 @@ S = "${WORKDIR}/git"
 
 SRC_URI += "file://disable-hardfloat-runtimeerror.patch"
 
-PR_append = ".1"
+PR_append = ".2"
 
