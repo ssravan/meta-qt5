@@ -1,42 +1,29 @@
 inherit qmake2
 
+PR_append = ".2"
+
 DEPENDS += "qt5-tools-native freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
 require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"
 QT_ENDIAN = "${@qt5_endian(d)}"
 
-QT_DISTRO_FLAGS ?= "-no-sm"
-QT_DISTRO_FLAGS_linuxstdbase = "-sm"
-
-QT_SQL_DRIVER_FLAGS ?= "-no-sql-ibase -no-sql-mysql -no-sql-psql -no-sql-odbc -plugin-sql-sqlite"
-
 QT_GLFLAGS ?= ""
 QT_BASE_LIB ?= "libqt"
 
-QT_CONFIG_FLAGS += "-reduce-relocations \
-                    -shared -no-nas-sound -no-nis \
-                    -no-cups \
-                    -release -separate-debug-info \
-                    -system-libjpeg -system-libpng -system-zlib \
-                    -stl -glib \
-                    -no-rpath -silent \
-                    ${QT_SQL_DRIVER_FLAGS} \
-                    ${QT_DISTRO_FLAGS} \
-                    ${QT_GLFLAGS}"
+QT_CONFIG_FLAGS += "\
+    -reduce-relocations                         \
+    -shared -no-nas-sound -no-nis               \
+    -release -separate-debug-info               \
+    -system-libjpeg -system-libpng -system-zlib \
+    -stl -no-rpath                              \
+    ${QT_GLFLAGS}                               \
+"
 
-EXTRA_OEMAKE = "-e"
-
-EXTRA_ENV = 'QMAKE="${STAGING_BINDIR_NATIVE}/qmake2 -after \
-             INCPATH+=${STAGING_INCDIR}/freetype2 LIBS+=-L${STAGING_LIBDIR}" \
-             QMAKESPEC="${QMAKESPEC}" LINK="${CXX} -Wl,-rpath-link,${STAGING_LIBDIR}" \
-             AR="${TARGET_PREFIX}ar cqs" \
-             MOC="${STAGING_BINDIR_NATIVE}/moc5" UIC="${STAGING_BINDIR_NATIVE}/uic5" MAKE="make -e"'
-
-export QT_CONF_PATH="${WORKDIR}/qt.conf"
+EXTRA_OEMAKE = ""
 
 # Library packages
-QT_LIB_NAMES = "QtCore QtDBus QtDesigner QtDesignerComponents QtGui QtWidgets QtHelp QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml QtOpenVG"
+QT_LIB_NAMES = "QtCore QtDBus QtDesigner QtDesignerComponents QtGui QtWidgets QtHelp QtNetwork QtOpenGL QtScript QtScriptTools QtSql QtSvg QtTest QtUiTools QtWebKit QtXml QtOpenVG QtConcurrent QtPrintSupport QtPlatformSupport"
 
 QT_EXTRA_LIBS = "pvrQWSWSEGL"
 
@@ -112,13 +99,12 @@ OTHER_PACKAGES = "\
 PACKAGES =+ "${QT_BASE_NAME}-demos-doc"
 PACKAGES += "${LIB_PACKAGES} ${DEV_PACKAGES} ${DBG_PACKAGES} ${OTHER_PACKAGES}"
 PACKAGES_DYNAMIC = "${QT_BASE_NAME}-plugin-* ${QT_BASE_NAME}-translation-* ${QT_BASE_NAME}-phrasebook-* ${QT_BASE_NAME}-fonts-*"
-#PACKAGES_DYNAMIC = "${QT_BASE_NAME}-plugin-* ${QT_BASE_NAME}-phrasebook-* ${QT_BASE_NAME}-fonts-*"
 
 ALLOW_EMPTY_${PN} = "1"
 ALLOW_EMPTY_${QT_BASE_NAME}-fonts = "1"
 FILES_${PN}     = ""
-FILES_${PN}-dev = "${includedir}/${QT_DIR_NAME}/Qt/*"
-FILES_${PN}-dbg = "${exec_prefix}/src/debug/"
+FILES_${PN}-dev += "${includedir}/${QT_DIR_NAME}/Qt ${libdir}/cmake"
+FILES_${PN}-dbg += "${exec_prefix}/src/debug"
 FILES_${QT_BASE_NAME}-demos-doc = "${docdir}/qtopia/qch/qt.qch"
 RRECOMMENDS_${PN} = "${LIB_PACKAGES} ${OTHER_PACKAGES}"
 RRECOMMENDS_${PN}-dev = "${DEV_PACKAGES}"
@@ -174,67 +160,52 @@ FILES_${QT_BASE_NAME}-qmlviewer            = "${bindir}/qmlviewer"
 FILES_${QT_BASE_NAME}-qmlviewer-dbg        = "${bindir}/.debug/qmlviewer"
 FILES_${QT_BASE_NAME}-makeqpf              = "${bindir}/makeqpf"
 FILES_${QT_BASE_NAME}-makeqpf-dbg          = "${bindir}/.debug/makeqpf"
-FILES_${QT_BASE_NAME}-mkspecs              = "${datadir}/${QT_DIR_NAME}/mkspecs/*"
+FILES_${QT_BASE_NAME}-mkspecs              = "${datadir}/${QT_DIR_NAME}/mkspecs"
 FILES_${QT_BASE_NAME}-qml-plugins          = "${libdir}/${QT_DIR_NAME}/imports/* ${libdir}/${QT_DIR_NAME}/plugins/qmltooling/*"
 FILES_${QT_BASE_NAME}-qml-plugins-dbg      = "${libdir}/${QT_DIR_NAME}/imports/*/*/*/.debug/* ${libdir}/${QT_DIR_NAME}/imports/*/.debug ${libdir}/${QT_DIR_NAME}/plugins/qmltooling/.debug"
 
 do_configure() {
     unset QMAKESPEC
     unset QTDIR
+    unset LD
+    unset CC
+    unset CXX
+    unset CFLAGS
+    unset CXXFLAGS
+    unset RANLIB
+    unset OBJDUMP
+    unset CCLD
+    unset OE_QMAKE_UIC
+    unset OE_QMAKE_MOC
+    unset OE_QMAKE_RCC
+    unset OE_QMAKE_QMAKE
 
-    if [ ! -e bin/qmake ]; then
-        pushd bin
-        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 qmake
-        popd
-    fi
+    mkdir -p mkspecs/${TARGET_OS}-oe-g++
+    cp -f ${WORKDIR}/qplatformdefs.h mkspecs/${TARGET_OS}-oe-g++
+    cp -f ${WORKDIR}/qmake.conf mkspecs/${TARGET_OS}-oe-g++
 
-    if [ ! -e mkspecs/${TARGET_OS}-oe-g++ ]; then
-        pushd mkspecs
-		    ln -sf linux-g++ ${TARGET_OS}-oe-g++
-        popd
-    fi
+    mkdir -p mkspecs/build-oe-g++
+    cp -f ${WORKDIR}/qplatformdefs.h mkspecs/build-oe-g++
+    cp -f ${WORKDIR}/qmake-build.conf mkspecs/build-oe-g++/qmake.conf
 
-    cp -f ${WORKDIR}/g++-base.conf mkspecs/common/g++-base.conf
-    cp -f ${WORKDIR}/gcc-base.conf mkspecs/common/gcc-base.conf
-	  cp -f ${WORKDIR}/linux.conf mkspecs/common/
-
-    echo "[Paths]"                                 > $QT_CONF_PATH
-    echo "Prefix=${prefix}/"                      >> $QT_CONF_PATH
-    echo "Documentation=${docdir}/${QT_DIR_NAME}" >> $QT_CONF_PATH
-    echo "Headers=${includedir}/${QT_DIR_NAME}"   >> $QT_CONF_PATH
-    echo "Libraries=${libdir}"                    >> $QT_CONF_PATH
-    echo "Binaries=${bindir}"                     >> $QT_CONF_PATH
-    echo "Plugins=${libdir}/${QT_DIR_NAME}/plugins" >> $QT_CONF_PATH
-    echo "Imports=${libdir}/${QT_DIR_NAME}/imports" >> $QT_CONF_PATH
-    echo "Data=${datadir}/${QT_DIR_NAME}"         >> $QT_CONF_PATH
-    echo "Translations=${datadir}/${QT_DIR_NAME}/translations" >> $QT_CONF_PATH
-    echo "Settings=${sysconfdir}/${QT_DIR_NAME}"  >> $QT_CONF_PATH
-    echo "Examples=${bindir}/${QT_DIR_NAME}/examples" >> $QT_CONF_PATH
-    echo "Demos=${bindir}/${QT_DIR_NAME}/demos"   >> $QT_CONF_PATH
-    
-    ${EXTRA_QMAKE_MUNGE}|| true
-    
     ./configure -v \
         -opensource -confirm-license \
-        -nomake tests \
-        -prefix ${prefix}/ \
-        -bindir ${bindir} \
-        -libdir ${libdir} \
+        -prefix ${prefix} \
+        -hostprefix ${STAGING_DIR_NATIVE}${prefix} \
+        -hostdatadir ${STAGING_DATADIR_NATIVE}/${QT_DIR_NAME} \
         -datadir ${datadir}/${QT_DIR_NAME} \
         -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
         -docdir ${docdir}/${QT_DIR_NAME} \
-        -headerdir ${includedir}/${QT_DIR_NAME} \
+        -headerdir ${STAGING_DIR_TARGET}${includedir}/${QT_DIR_NAME} \
         -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
         -importdir ${libdir}/${QT_DIR_NAME}/imports \
         -translationdir ${datadir}/${QT_DIR_NAME}/translations \
-        -examplesdir ${bindir}/${QT_DIR_NAME}/examples \
-        -platform ${TARGET_OS}-oe-g++ \
+        -examplesdir /usr/local/${QT_DIR_NAME}/examples \
+        -platform build-oe-g++ \
         -xplatform ${TARGET_OS}-oe-g++ \
-        ${QT_ENDIAN} \
         -arch ${QT_ARCH} \
-        ${QT_CONFIG_FLAGS} -no-fast \
-        -L${STAGING_LIBDIR} -I${STAGING_INCDIR} \
-        -I${STAGING_INCDIR}/freetype2
+        -nomake tests -nomake examples \
+        ${QT_CONFIG_FLAGS} -no-fast
 }
 
 python populate_packages_prepend() {
@@ -292,49 +263,64 @@ python populate_packages_prepend() {
         qtopia_split('imageformats',  'imageformat',   '^libq(.*)\.so$')
         qtopia_split('inputmethods',  'inputmethod',   '^libq(.*)\.so$')
         qtopia_split('platforms',     'platforms',     '^lib(.*)\.so$')
-        qtopia_split('sqldrivers',    'sqldriver',     '^libq(.*)\.so$')
+        qtopia_split('sqldrivers',    'sqldrivers',    '^libq(.*)\.so$')
         qtopia_split('script',        'script',        '^libqtscript(.*)\.so$')
         qtopia_split('styles',        'style',         '^libq(.*)\.so$')
         qtopia_split('phonon_backend','phonon-backend','^libphonon_(.*)\.so$')
 }
 
-do_install() {
-	oe_runmake install INSTALL_ROOT=${D}
+do_compile() {
+    unset QMAKESPEC
+    unset QTDIR
+    unset LD
+    unset CC
+    unset CXX
+    unset CFLAGS
+    unset CXXFLAGS
+    unset RANLIB
+    unset OBJDUMP
+    unset CCLD
 
-	install -d ${D}/${libdir}/fonts
-	touch ${D}/${libdir}/fonts/fontdir
+    oe_runmake
+}
+
+do_compile_prepend() {
+    unset QMAKESPEC
+    unset QTDIR
+    unset LD
+    unset CC
+    unset CXX
+    unset CFLAGS
+    unset CXXFLAGS
+    unset RANLIB
+    unset OBJDUMP
+    unset CCLD
+
+    for i in bootstrap rcc moc uic; do
+        oe_runmake -C src/tools/${i}
+    done
+
+    install -d ${STAGING_BINDIR_NATIVE}
+    install -m 0755 bin/qmake ${STAGING_BINDIR_NATIVE}/qmake2
+    for i in moc uic rcc ; do
+        install -m 0755 bin/${i} ${STAGING_BINDIR_NATIVE}/${i}5
+    done
+
+    (cd ${STAGING_BINDIR_NATIVE}; \
+    ln -sf qmake2 qmake; \
+    for i in moc uic rcc; do \
+        ln -sf ${i}5 ${i}; \
+    done)
+}
+
+do_install() {
+  	oe_runmake install INSTALL_ROOT=${D}
 }
 
 do_install_append() {
-	# These are host binaries, we should only use them in staging
-	rm ${D}/${bindir}/qmake
+    rsync -av ${D}${STAGING_DIR_NATIVE}/ ${STAGING_DIR_NATIVE}
+    rm -r ${D}${STAGING_DIR_NATIVE}
 
-	# fix pkgconfig, libtool and prl files
-	sed -i -e 's#-L${S}/lib/\?##g' \
-			-e 's#-L${STAGING_LIBDIR}/\?##g' \
-			-e 's#STAGING_LIBDIR}#libdir}'#g \
-			-e 's#-L${libdir}/\?##g' \
-			-e s#'$(OE_QMAKE_LIBS_X11)'#"${OE_QMAKE_LIBS_X11}"#g \
-			-e 's#" -Wl,-rpath-link,${S}/lib/\?"##g' \
-			-e 's#" -Wl,-rpath-link,${libdir}/\?"##g' \
-			-e 's#Iin#I${in#g' \
-			${D}${libdir}/*.la ${D}${libdir}/*.prl ${D}${libdir}/pkgconfig/*.pc
-
-	sed -i -e s#" -Wl,-rpath-link,${S}/lib"##g \
-			${D}${datadir}/${QT_DIR_NAME}/mkspecs/common/linux.conf
-
-	# fix pkgconfig files
-	sed -i -e s#"moc_location=.*$"#"moc_location=${bindir}/moc5"# \
-			-e s#"uic_location=.*$"#"uic_location=${bindir}/uic5"# \
-			${D}${libdir}/pkgconfig/*.pc
-	for name in ${QT_LIB_NAMES}; do
-		sed -i -e /Requires/s#"${name}"#"${name}${QT_LIBINFIX}"#g ${D}${libdir}/pkgconfig/*.pc
-	done
-
-	# QT abuses $includedir to point to its headers, which breaks pkgconfig sysroot, so manually fix it up here:
-	for pc in ${D}${libdir}/pkgconfig/*.pc ; do
-		sed -i -e "s:prefix}include/${QT_DIR_NAME}/$(basename $pc .pc):prefix}/include:" \
-				-e 's:IP{:I${:g' $pc
-	done
+    rsync -av ${D}${STAGING_DIR_TARGET}/* ${D}
+    rm -r ${D}${STAGING_DIR_TARGET}
 }
-

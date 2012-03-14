@@ -5,7 +5,7 @@ inherit qmake_base
 
 DEPENDS_prepend = "qt5-tools-native "
 
-export QMAKESPEC = "${STAGING_DATADIR}/qt5/mkspecs/${TARGET_OS}-oe-g++"
+export QMAKESPEC = "${STAGING_DATADIR_NATIVE}/qt5/mkspecs/${TARGET_OS}-oe-g++"
 export OE_QMAKE_UIC = "${STAGING_BINDIR_NATIVE}/uic5"
 export OE_QMAKE_MOC = "${STAGING_BINDIR_NATIVE}/moc5"
 export OE_QMAKE_RCC = "${STAGING_BINDIR_NATIVE}/rcc5"
