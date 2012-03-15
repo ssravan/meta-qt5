@@ -9,11 +9,16 @@ SRCREV = "39327bbe38d90cc4ec10c9dddc5722169f454d4f"
 SRC_URI = "git://gitorious.org/qt/qtdeclarative.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR = "r0"
+PR = "r1"
 
 FILES_${PN} += "\
     /usr/local/qt5/examples/qtdeclarative/demos/calculator/calculator \
+    /usr/local/qt5/examples/qtdeclarative/demos/calculator/*.qml \
     /usr/local/qt5/examples/qtdeclarative/demos/calculator/CalculatorCore \
+"
+
+FILES_${PN}-dbg += "\
+    /usr/local/qt5/examples/qtdeclarative/demos/calculator/.debug \
 "
 
 do_configure () {
