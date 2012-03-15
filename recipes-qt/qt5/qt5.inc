@@ -315,6 +315,9 @@ do_compile_prepend() {
 
 do_install() {
   	oe_runmake install INSTALL_ROOT=${D}
+
+    install -d ${D}/${libdir}/fonts
+    touch ${D}/${libdir}/fonts/fontdir
 }
 
 do_install_append() {
