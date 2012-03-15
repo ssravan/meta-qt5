@@ -2,7 +2,7 @@ inherit qmake2
 
 PR_append = ".2"
 
-DEPENDS += "qt5-tools-native freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
+DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
 require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"

@@ -2,6 +2,8 @@ inherit qmake2
 
 require qt-5.0.0.inc
 
+DEPENDS += "qt5-x11-free"
+
 SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git"
 
 PR = "r1"
