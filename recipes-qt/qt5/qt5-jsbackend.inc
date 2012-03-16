@@ -3,14 +3,18 @@ DEPENDS = "qt5-x11-free"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1;md5=1a6d268fd218675ffea8be556788b780"
 
-PR = "r4"
+PR = "r5"
 
 inherit qt5x11
 
+SRC_URI += "file://qtjsbackend-novfpdetection.patch"
+
 FILES_${PN}-dev += "\
     ${includedir}/${QT_DIR_NAME}            \
+    ${libdir}/cmake                         \
+    ${libdir}/*.prl                         \
 "
-FILES_${PN}-dbg += "${exec_prefix}/src/debug/"
+FILES_${PN}-dbg += "${exec_prefix}/src/debug"
 
 do_configure () {
     :
@@ -19,6 +23,11 @@ do_configure () {
 
 do_compile () {
     QTDIR=${QMAKESPEC}/../.. qmake2
+
+    if ! grep -q 'config_test_hardfloat = yes' .qmake.cache; then
+        die "Hardfloat detection failed!"
+    fi
+
     oe_runmake
 }
 

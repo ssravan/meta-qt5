@@ -1,0 +1,11 @@
+--- git/config.tests/hardfloat/hardfloat.pro.old	2012-03-16 11:36:18.000000000 +0100
++++ git/config.tests/hardfloat/hardfloat.pro	2012-03-16 11:33:44.000000000 +0100
+@@ -4,7 +4,7 @@ OBJECTS_DIR = obj
+ QMAKE_CXXFLAGS += -MD
+ 
+ equals(QT_ARCH, "arm"):unix {
+-    test.commands = readelf -A hardfloat | grep -q \'Tag_ABI_VFP_args: VFP registers\'
++    test.commands = readelf -A hardfloat # | grep -q \'Tag_ABI_VFP_args: VFP registers\'
+     test.depends = hardfloat
+     QMAKE_EXTRA_TARGETS += test
+ 
