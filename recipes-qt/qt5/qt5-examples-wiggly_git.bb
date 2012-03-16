@@ -6,9 +6,11 @@ DEPENDS += "qt5-x11-free"
 
 SRC_URI = "git://gitorious.org/qt/qtbase.git;protocol=git"
 
-PR = "r1"
+PR = "r2"
 
 FILES_${PN} += "/usr/local/qt5/examples/qtbase/widgets/wiggly/wiggly"
+FILES_${PN}-dbg += "/usr/local/qt5/examples/qtbase/widgets/wiggly/.debug"
+FILES_${PN}-dev += "/usr/local/qt5/examples/qtbase/widgets/wiggly"
 
 do_configure () {
     :
