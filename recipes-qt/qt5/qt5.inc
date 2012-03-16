@@ -9,7 +9,7 @@ QT_ARCH := "${@qt5_arch(d)}"
 QT_ENDIAN = "${@qt5_endian(d)}"
 
 QT_GLFLAGS ?= ""
-QT_BASE_LIB ?= "libqt"
+QT_BASE_LIB ?= "qt5-"
 
 QT_CONFIG_FLAGS += "\
     -reduce-relocations                         \
@@ -35,7 +35,7 @@ python __anonymous () {
     dbg_packages = []
 
     for name in d.getVar("QT_LIB_NAMES", 1).split():
-        pkg = d.getVar("QT_BASE_LIB", True) + name.lower().replace("qt", "").replace("_", "-") + "5"
+        pkg = d.getVar("QT_BASE_LIB", True) + name.lower().replace("qt", "").replace("_", "-")
        # NOTE: the headers for QtAssistantClient are different
         incname = name.replace("QtAssistantClient", "QtAssistant")
         d.setVar("FILES_%s" % pkg, "${libdir}/lib%(name)s${QT_LIBINFIX}.so.*" % locals())
