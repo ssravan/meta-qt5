@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".2"
+PR_append = ".3"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -315,9 +315,6 @@ do_compile_prepend() {
 
 do_install() {
   	oe_runmake install INSTALL_ROOT=${D}
-
-    install -d ${D}/${libdir}/fonts
-    touch ${D}/${libdir}/fonts/fontdir
 }
 
 do_install_append() {
@@ -326,4 +323,6 @@ do_install_append() {
 
     rsync -av ${D}${STAGING_DIR_TARGET}/* ${D}
     rm -r ${D}${STAGING_DIR_TARGET}
+
+    rsync -av lib/fonts ${D}${libdir}
 }
