@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".4"
+PR_append = ".5"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -9,14 +9,13 @@ QT_ARCH := "${@qt5_arch(d)}"
 QT_ENDIAN = "${@qt5_endian(d)}"
 
 QT_GLFLAGS ?= ""
-QT_BASE_LIB ?= "qt5-"
+QT_BASE_LIB ?= "qt5-lib"
 
 QT_CONFIG_FLAGS += "\
     -reduce-relocations                         \
     -shared -no-nas-sound -no-nis               \
     -release -separate-debug-info               \
     -system-libjpeg -system-libpng -system-zlib \
-    -no-exceptions                              \
     -stl -no-rpath                              \
     ${QT_GLFLAGS}                               \
 "
