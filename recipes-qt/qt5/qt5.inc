@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".3"
+PR_append = ".4"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -16,6 +16,7 @@ QT_CONFIG_FLAGS += "\
     -shared -no-nas-sound -no-nis               \
     -release -separate-debug-info               \
     -system-libjpeg -system-libpng -system-zlib \
+    -no-exceptions                              \
     -stl -no-rpath                              \
     ${QT_GLFLAGS}                               \
 "
@@ -182,11 +183,11 @@ do_configure() {
 
     mkdir -p mkspecs/${TARGET_OS}-oe-g++
     cp -f ${WORKDIR}/qplatformdefs.h mkspecs/${TARGET_OS}-oe-g++
-    cp -f ${WORKDIR}/qmake.conf mkspecs/${TARGET_OS}-oe-g++
+    bash ${WORKDIR}/qmake.conf.sh > mkspecs/${TARGET_OS}-oe-g++/qmake.conf
 
     mkdir -p mkspecs/build-oe-g++
     cp -f ${WORKDIR}/qplatformdefs.h mkspecs/build-oe-g++
-    cp -f ${WORKDIR}/qmake-build.conf mkspecs/build-oe-g++/qmake.conf
+    bash ${WORKDIR}/qmake-build.conf.sh > mkspecs/build-oe-g++/qmake.conf
 
     ./configure -v \
         -opensource -confirm-license \
