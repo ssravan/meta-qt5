@@ -144,8 +144,8 @@ FILES_${QT_BASE_NAME}-demos                = "${bindir}/qtdemo* ${bindir}/${QT_D
 FILES_${QT_BASE_NAME}-demos-dbg            = "${bindir}/.debug/qtdemo* ${bindir}/${QT_DIR_NAME}/demos/.debug/*  ${bindir}/${QT_DIR_NAME}/demos/*/.debug  ${bindir}/${QT_DIR_NAME}/demos/*/*/.debug  ${bindir}/${QT_DIR_NAME}/demos/*/*/*/.debug"
 FILES_${QT_BASE_NAME}-designer             = "${bindir}/*designer*"
 FILES_${QT_BASE_NAME}-designer-dbg         = "${bindir}/.debug/*designer*"
-FILES_${QT_BASE_NAME}-examples             = "${bindir}/${QT_DIR_NAME}/examples/*"
-FILES_${QT_BASE_NAME}-examples-dbg         = "${bindir}/${QT_DIR_NAME}/examples/.debug ${bindir}/${QT_DIR_NAME}/examples/*/.debug ${bindir}/${QT_DIR_NAME}/examples/*/*/.debug ${bindir}/${QT_DIR_NAME}/examples/*/*/*/.debug ${bindir}/${QT_DIR_NAME}/examples/*/*/*/*/.debug ${bindir}/${QT_DIR_NAME}/examples/declarative/*/*/*/*/*/.debug/* ${bindir}/${QT_DIR_NAME}/examples/declarative/*/*/*/*/.debug/*"
+FILES_${QT_BASE_NAME}-examples             = "/usr/local/${QT_DIR_NAME}/examples"
+FILES_${QT_BASE_NAME}-examples-dbg         = "/usr/local/${QT_DIR_NAME}/examples/.debug /usr/local/${QT_DIR_NAME}/examples/*/.debug /usr/local/${QT_DIR_NAME}/examples/*/*/.debug /usr/local/${QT_DIR_NAME}/examples/*/*/*/.debug /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/.debug /usr/local/${QT_DIR_NAME}/examples/declarative/*/*/*/*/*/.debug/* /usr/local/${QT_DIR_NAME}/examples/declarative/*/*/*/*/.debug/*"
 FILES_${QT_BASE_NAME}-fonts-ttf-vera       = "${libdir}/fonts/Vera*.ttf"
 FILES_${QT_BASE_NAME}-fonts-ttf-dejavu     = "${libdir}/fonts/DejaVu*.ttf"
 FILES_${QT_BASE_NAME}-fonts-pfa            = "${libdir}/fonts/*.pfa"
@@ -204,7 +204,7 @@ do_configure() {
         -platform build-oe-g++ \
         -xplatform ${TARGET_OS}-oe-g++ \
         -arch ${QT_ARCH} \
-        -nomake tests -nomake examples \
+        -nomake tests \
         ${QT_CONFIG_FLAGS} -no-fast
 }
 

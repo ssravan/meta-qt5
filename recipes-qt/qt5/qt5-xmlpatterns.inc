@@ -7,11 +7,15 @@ PR = "r4"
 
 inherit qt5x11
 
+PACKAGES += "${PN}-examples"
+
 FILES_${PN}-dev += "\
     ${includedir}/${QT_DIR_NAME}/${name} \
+    ${libdir}/*.prl \
     ${libdir}/cmake \
 "
 FILES_${PN}-dbg += "${exec_prefix}/src/debug/"
+FILES_${PN}-examples += "/usr/local/qt5/examples"
 
 do_configure () {
     :

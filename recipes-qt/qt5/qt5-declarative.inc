@@ -9,6 +9,8 @@ inherit qt5x11
 
 SRC_URI += "file://qt5-declarative-plugin-installpath.patch"
 
+PACKAGES += "${PN}-examples"
+
 FILES_${PN}-dbg += "\
     ${exec_prefix}/src/debug                        \
     ${libdir}/${QT_DIR_NAME}/imports/*/.debug       \
@@ -16,7 +18,6 @@ FILES_${PN}-dbg += "\
     ${libdir}/${QT_DIR_NAME}/imports/*/*/*/.debug   \
     ${libdir}/${QT_DIR_NAME}/plugins/*/.debug       \
 "
-
 FILES_${PN} += "\
     ${libdir}/${QT_DIR_NAME}/imports                \
     ${libdir}/${QT_DIR_NAME}/plugins                \
@@ -27,6 +28,7 @@ FILES_${PN}-dev += "\
     ${incdir}/${QT_DIR_NAME}                        \
     ${libdir}/*.prl                                 \
 "
+FILES_${PN}-examples += "/usr/local/qt5/examples"
 
 do_configure () {
     :
