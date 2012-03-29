@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".5"
+PR_append = ".7"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -132,8 +132,8 @@ RRECOMMENDS_${QT_BASE_NAME}-qmlviewer += " \
 RRECOMMENDS_${QT_BASE_NAME}-doc += " \
             ${QT_BASE_NAME}-demos-doc"
 
-FILES_${QT_BASE_NAME}-tools                = "${bindir}/qttracereplay ${bindir}/qdoc* ${bindir}/moc ${bindir}/uic* ${bindir}/rcc"
-FILES_${QT_BASE_NAME}-tools-dbg            = "${bindir}/.debug/qttracereplay ${bindir}/.debug/qdoc* ${bindir}/.debug/uic* ${bindir}/.debug/moc ${bindir}/.debug/rcc"
+#FILES_${QT_BASE_NAME}-tools                = "${bindir}/qttracereplay"
+#FILES_${QT_BASE_NAME}-tools-dbg            = "${bindir}/.debug/qttracereplay ${bindir}/.debug/qdoc*"
 FILES_${QT_BASE_NAME}-assistant            = "${bindir}/*assistant* ${bindir}/qcollectiongenerator ${bindir}/qhelpconverter ${bindir}/qhelpgenerator"
 FILES_${QT_BASE_NAME}-assistant-dbg        = "${bindir}/.debug/*assistant* ${bindir}/.debug/qcollectiongenerator ${bindir}/.debug/qhelpconverter ${bindir}/.debug/qhelpgenerator"
 FILES_${QT_BASE_NAME}-common               = "${bindir}/qtconfig"
@@ -318,6 +318,14 @@ do_install() {
 }
 
 do_install_append() {
+    pushd ${D}${libdir}/cmake
+    sed -i \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/qmake#${STAGING_BINDIR_NATIVE}/qmake2#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/moc#${STAGING_BINDIR_NATIVE}/moc5#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/rcc#${STAGING_BINDIR_NATIVE}/rcc5#g" \
+        Qt5Core/Qt5CoreConfigExtras.cmake
+    popd
+
     rsync -av ${D}${STAGING_DIR_NATIVE}/ ${STAGING_DIR_NATIVE}
     rm -r ${D}${STAGING_DIR_NATIVE}
 
