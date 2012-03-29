@@ -1,82 +1,85 @@
-require qt5-native.inc
 require qt5_arch.inc
 
 DESCRIPTION = "SDK tools for Qt version 5.x"
-DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
+DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
-INC_PR = "r2"
+INC_PR = "r3"
 
 inherit nativesdk qmake2
 
-SRC_URI += "file://configure-lflags.patch \
-            file://qmake-exists-check.patch \
-            file://configure-paths.patch \
-            file://qt-dbus-const.patch"
-
-EXTRA_OECONF = "-opensource -confirm-license \
-                -prefix ${prefix} \
-                -nomake libs -nomake examples -nomake tests \
-                -verbose -release -static \
-                -platform ${TARGET_OS}-oe-g++ \
-                -xplatform ${TARGET_OS}-oe-g++ \
-                -arch ${@qt5_arch(d)} \
-                ${@qt5_endian(d)} \
-                -host-little-endian \
-                -no-xcb -no-wayland \
-                -I${STAGING_DIR_HOST}${SDKPATHNATIVE}/usr/include/dbus-1.0 \
-                -I${STAGING_DIR_HOST}${SDKPATHNATIVE}/usr/lib/dbus-1.0/include"
+QT_CONFIG_FLAGS += "\
+    -reduce-relocations                         \
+     -no-nas-sound -no-nis                      \
+    -release                                    \
+    -stl -no-rpath                              \
+    -no-xcb -no-wayland -no-opengl -no-eglfs    \
+"
 
 # yank default -e, otherwise we get the following error:
 # moc_qbuffer.cpp: No such file or directory
 EXTRA_OEMAKE = " "
 
 do_configure() {
-    # prefer g++ over ld
+    unset QMAKESPEC
+    unset QTDIR
     unset LD
+    unset CC
+    unset CXX
+    unset CFLAGS
+    unset CXXFLAGS
+    unset RANLIB
+    unset OBJDUMP
+    unset CCLD
+    unset OE_QMAKE_UIC
+    unset OE_QMAKE_MOC
+    unset OE_QMAKE_RCC
+    unset OE_QMAKE_QMAKE
 
-    if [ ! -e mkspecs/${TARGET_OS}-oe-g++ ]; then
-        pushd mkspecs
-        ln -sf linux-g++ ${TARGET_OS}-oe-g++
-        popd
-    fi
+    mkdir -p mkspecs/${TARGET_OS}-oe-g++
+    cp -f ${WORKDIR}/qplatformdefs.h mkspecs/${TARGET_OS}-oe-g++
+    bash ${WORKDIR}/qmake.conf.sh > mkspecs/${TARGET_OS}-oe-g++/qmake.conf
 
-    cp -f ${WORKDIR}/g++-base.conf mkspecs/common/g++-base.conf
-    cp -f ${WORKDIR}/gcc-base.conf mkspecs/common/gcc-base.conf
-    cp -f ${WORKDIR}/linux.conf mkspecs/common/
+    mkdir -p mkspecs/build-oe-g++
+    cp -f ${WORKDIR}/qplatformdefs.h mkspecs/build-oe-g++
+    bash ${WORKDIR}/qmake-build.conf.sh > mkspecs/build-oe-g++/qmake.conf
 
-    # don't use host g++ even during configure
-    sed -i -e "s#g++#${CXX}#" mkspecs/common/g++-base.conf
-    sed -i -e "s#gcc#${CC}#" mkspecs/common/g++-base.conf
-
-    # first launch configure to get qmake compiled for the nativesdk
-    CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} || true
-
-    # then backup the binary and start again with a qmake which can run on the build host
-    mv bin/qmake bin/qmake_nativesdk
-    if [ ! -e bin/qmake ]; then
-        pushd bin
-        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 qmake
-        popd
-    fi
-    CC="${CC}" CXX="${CXX}" ./configure ${EXTRA_OECONF} \
-        || die "Configuring qt failed. EXTRA_OECONF was ${EXTRA_OECONF}"
+    ./configure -v \
+        -opensource -confirm-license \
+        -prefix ${prefix} \
+        -datadir ${datadir}/${QT_DIR_NAME} \
+        -sysconfdir ${sysconfdir}/${QT_DIR_NAME} \
+        -docdir ${docdir}/${QT_DIR_NAME} \
+        -headerdir ${includedir}/${QT_DIR_NAME} \
+        -plugindir ${libdir}/${QT_DIR_NAME}/plugins \
+        -importdir ${libdir}/${QT_DIR_NAME}/imports \
+        -translationdir ${datadir}/${QT_DIR_NAME}/translations \
+        -platform ${TARGET_OS}-oe-g++              \
+        -xplatform ${TARGET_OS}-oe-g++                 \
+        -arch ${QT_ARCH} \
+        ${QT_CONFIG_FLAGS} -no-fast
 }
 
-TOBUILD = "\
-  src/tools/bootstrap \
-  src/tools/moc \
-  src/tools/uic \
-  src/tools/rcc \
-"
-
 do_compile() {
-    oe_runmake CC="${CC}" CXX="${CXX}"
+    unset QMAKESPEC
+    unset QTDIR
+    unset LD
+    unset CC
+    unset CXX
+    unset CFLAGS
+    unset CXXFLAGS
+    unset RANLIB
+    unset OBJDUMP
+    unset CCLD
+
+    for i in bootstrap rcc moc uic; do
+        oe_runmake -C src/tools/${i}
+    done
 }
 
 do_install() {
     install -d ${D}${bindir}
-    install -m 0755 bin/qmake_nativesdk ${D}${bindir}/qmake2
+    install -m 0755 bin/qmake ${D}${bindir}/qmake2
     for i in moc uic rcc; do
         install -m 0755 bin/${i} ${D}${bindir}/${i}5
     done
