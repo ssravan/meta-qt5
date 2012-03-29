@@ -3,13 +3,13 @@ DEPENDS = "qt5-x11-free qt5-xmlpatterns qt5-jsbackend"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1;md5=1a6d268fd218675ffea8be556788b780"
 
-PR = "r5"
+PR = "r6"
 
 inherit qt5x11
 
 SRC_URI += "file://qt5-declarative-plugin-installpath.patch"
 
-PACKAGES += "${PN}-examples"
+PACKAGES += "${PN}-examples-dbg ${PN}-examples"
 
 FILES_${PN}-dbg += "\
     ${exec_prefix}/src/debug                        \
@@ -28,7 +28,15 @@ FILES_${PN}-dev += "\
     ${incdir}/${QT_DIR_NAME}                        \
     ${libdir}/*.prl                                 \
 "
-FILES_${PN}-examples += "/usr/local/qt5/examples"
+FILES_${PN}-examples += "/usr/local/${QT_DIR_NAME}/examples"
+FILES_${PN}-examples-dbg += "\
+    /usr/local/${QT_DIR_NAME}/examples/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/*/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/*/*/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/*/.debug \
+"
 
 do_configure () {
     :
