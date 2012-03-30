@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".7"
+PR_append = ".8"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -8,7 +8,7 @@ require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"
 QT_ENDIAN = "${@qt5_endian(d)}"
 
-QT_GLFLAGS ?= ""
+QT_PLATFORMFLAGS ?= ""
 QT_BASE_LIB ?= "qt5-lib"
 
 QT_CONFIG_FLAGS += "\
@@ -17,7 +17,7 @@ QT_CONFIG_FLAGS += "\
     -release -separate-debug-info               \
     -system-libjpeg -system-libpng -system-zlib \
     -stl -no-rpath                              \
-    ${QT_GLFLAGS}                               \
+    ${QT_PLATFORMFLAGS}                         \
 "
 
 EXTRA_OEMAKE = ""
@@ -205,7 +205,7 @@ do_configure() {
         -xplatform ${TARGET_OS}-oe-g++ \
         -arch ${QT_ARCH} \
         -nomake tests \
-        ${QT_CONFIG_FLAGS} -no-fast
+        ${QT_PLATFORMFLAGS} -no-fast
 }
 
 python populate_packages_prepend() {
