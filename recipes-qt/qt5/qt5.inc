@@ -203,7 +203,6 @@ do_configure() {
         -examplesdir /usr/local/${QT_DIR_NAME}/examples \
         -platform build-oe-g++ \
         -xplatform ${TARGET_OS}-oe-g++ \
-        -arch ${QT_ARCH} \
         -nomake tests \
         ${QT_PLATFORMFLAGS} -no-fast
 }
