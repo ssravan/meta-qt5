@@ -327,7 +327,7 @@ do_install_append() {
 
 
     for i in *; do
-        m = ${i/Qt5/}
+        m=${i/Qt5/}
         sed -i \
             -e "s#${STAGING_DIR_TARGET}${includedir}/${QT_DIR_NAME}/#\${_qt5${m}_install_prefix}/include/${QT_DIR_NAME}/#g" \
             ${i}/${i}Config.cmake
