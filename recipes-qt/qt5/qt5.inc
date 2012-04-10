@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".9"
+PR_append = ".11"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 
@@ -319,11 +319,19 @@ do_install() {
 do_install_append() {
     pushd ${D}${libdir}/cmake
     sed -i \
-        -e "s#_qt5_corelib_install_prefix \${CMAKE_CURRENT_LIST_DIR}/../../../#_qt5_corelib_install_prefix  \$ENV{PSEUDO_PREFIX}\$ENV{OECORE_NATIVE_SYSROOT}/usr#" \
-        -e "s#\${_qt5_corelib_install_prefix}/bin/qmake#\${_qt5_corelib_install_prefix}/bin/qmake2#g" \
-        -e "s#\${_qt5_corelib_install_prefix}/bin/moc#\${_qt5_corelib_install_prefix}/bin/moc5#g" \
-        -e "s#\${_qt5_corelib_install_prefix}/bin/rcc#\${_qt5_corelib_install_prefix}/bin/rcc5#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/qmake#qmake2#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/moc#moc5#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/bin/rcc#rcc5#g" \
+        -e "s#\${_qt5_corelib_install_prefix}/mkspecs#\$ENV{PSEUDO_PREFIX}\$ENV{OECORE_NATIVE_SYSROOT}/usr/share/qt5/mkspecs#" \
         Qt5Core/Qt5CoreConfigExtras.cmake
+
+
+    for i in *; do
+        m = ${i/Qt5/}
+        sed -i \
+            -e "s#${STAGING_DIR_TARGET}${includedir}/${QT_DIR_NAME}/#\${_qt5${m}_install_prefix}/include/${QT_DIR_NAME}/#g" \
+            ${i}/${i}Config.cmake
+    done
     popd
 
     rsync -av ${D}${STAGING_DIR_NATIVE}/ ${STAGING_DIR_NATIVE}
