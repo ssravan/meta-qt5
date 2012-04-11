@@ -10,7 +10,7 @@ inherit nativesdk qmake2
 
 QT_CONFIG_FLAGS += "\
     -reduce-relocations                         \
-     -no-nas-sound -no-nis                      \
+    -no-nis                                     \
     -release                                    \
     -stl -no-rpath                              \
     -no-xcb -no-wayland -no-opengl -no-eglfs    \
