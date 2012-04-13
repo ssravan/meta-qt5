@@ -3,7 +3,7 @@ DEPENDS = "qt5-x11-free"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1;md5=1a6d268fd218675ffea8be556788b780"
 
-PR = "r5"
+PR = "r6"
 
 inherit qt5x11
 
@@ -32,6 +32,17 @@ do_configure () {
 do_compile () {
     QTDIR="${QMAKESPEC}/../.." qmake2
     oe_runmake
+}
+
+do_install_prepend() {
+    pushd lib/cmake
+        for i in *; do
+        m=${i/Qt5/}
+        sed -i \
+            -e "s#${STAGING_DIR_TARGET}${includedir}/${QT_DIR_NAME}/#\${_qt5${m}_install_prefix}/include/${QT_DIR_NAME}/#g" \
+            ${i}/${i}Config.cmake
+    done
+    popd
 }
 
 do_install() {
