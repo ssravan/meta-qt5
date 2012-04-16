@@ -6,5 +6,5 @@ SRC_URI += "file://disable-hardfloat-runtimeerror.patch"
 
 require qt5-jsbackend.inc
 
-PR_append = ".4"
+PR_append = ".5"
 

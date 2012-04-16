@@ -1,10 +1,10 @@
 require qt5-xmlpatterns.inc
 
-SRCREV = "0d6c28c5eb7046bbc011b060fdcab1f622ed9f9a"
+SRCREV = "08a3b2ea08480ef2f5b4ebc9d9a1442d45e1fa4c"
 SRC_URI = "git://gitorious.org/qt/qtxmlpatterns.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR_append = ".3"
+PR_append = ".4"
 
 DEFAULT_PREFERENCE = "-1"
 
