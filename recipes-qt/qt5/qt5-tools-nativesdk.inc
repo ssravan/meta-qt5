@@ -1,5 +1,3 @@
-require qt5_arch.inc
-
 DESCRIPTION = "SDK tools for Qt version 5.x"
 DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk"
 SECTION = "libs"
@@ -7,6 +5,10 @@ HOMEPAGE = "http://qt.nokia.com"
 INC_PR = "r3"
 
 inherit nativesdk qmake2
+
+require qt5_arch.inc
+QT_ARCH := "${@qt5_arch(d)}"
+QT_ENDIAN = "${@qt5_endian(d)}"
 
 QT_CONFIG_FLAGS += "\
     -reduce-relocations                         \
