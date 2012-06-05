@@ -5,11 +5,11 @@ DEPENDS += "qt5-declarative"
 LICENSE = "LGPLv2.1"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/LGPL-2.1;md5=1a6d268fd218675ffea8be556788b780"
 
-SRCREV = "39327bbe38d90cc4ec10c9dddc5722169f454d4f"
+SRCREV = "e9eca3ecf778097c034eb76e930c9a7e4e3e6194"
 SRC_URI = "git://gitorious.org/qt/qtdeclarative.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR = "r2"
+PR = "r3"
 
 FILES_${PN} += "\
     /usr/local/qt5/examples/qtdeclarative/demos/calculator/calculator \

@@ -1,4 +1,4 @@
-SRCREV = "2c1bc67598c55314c226c27530398a9a7ddbf1b7"
+SRCREV = "f5ec4d8aa8ae844a7d1675ba85f416c290b1b4ea"
 SRC_URI += "git://gitorious.org/qt/qtjsbackend.git;protocol=git"
 S = "${WORKDIR}/git"
 
@@ -6,5 +6,5 @@ SRC_URI += "file://disable-hardfloat-runtimeerror.patch"
 
 require qt5-jsbackend.inc
 
-PR_append = ".5"
+PR_append = ".6"
 

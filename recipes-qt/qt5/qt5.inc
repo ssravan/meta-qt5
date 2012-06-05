@@ -1,6 +1,6 @@
 inherit qmake2
 
-PR_append = ".11"
+PR_append = ".12"
 
 DEPENDS += "freetype jpeg libpng zlib dbus openssl glib-2.0 gstreamer gst-plugins-base sqlite3"
 DEPENDS += "${QT_GLDEPENDS}"
