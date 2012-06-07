@@ -7,7 +7,7 @@ PR = "r7"
 
 inherit qt5x11
 
-SRC_URI += "file://qt5-declarative-plugin-installpath.patch"
+#SRC_URI += "file://qt5-declarative-plugin-installpath.patch"
 
 PACKAGES += "${PN}-examples-dbg ${PN}-examples"
 

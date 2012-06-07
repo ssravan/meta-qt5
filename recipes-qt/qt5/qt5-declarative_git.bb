@@ -1,10 +1,10 @@
 require qt5-declarative.inc
 
-SRCREV = "e9eca3ecf778097c034eb76e930c9a7e4e3e6194"
+SRCREV = "ca6d49e6b4096f5a9737c6aee04e9b22a781aba2"
 SRC_URI += "git://gitorious.org/qt/qtdeclarative.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR_append = ".5"
+PR_append = ".6"
 
 DEFAULT_PREFERENCE = "-1"
 

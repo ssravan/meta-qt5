@@ -10,7 +10,7 @@ DEPENDS += "virtual/libx11 \
 RDEPENDS += "libx11-xcb libxcb xcb-util xcb-util-wm xcb-util-image xcb-util-keysyms"
 
 QT_PLATFORMFLAGS = "-xcb -no-xinerama -no-xkb"
-QT_PLATFORMFLAGS_armv7a = "-eglfs -opengl es2"
+QT_PLATFORMFLAGS_armv7a = "-eglfs -opengl es2 -no-dbus"
 
 QT_GLDEPENDS = "virtual/libgl"
 QT_GLDEPENDS_armv7a = "virtual/egl"
