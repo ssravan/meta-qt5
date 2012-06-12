@@ -1,0 +1,15 @@
+--- git/src/3rdparty/v8/src/profile-generator.cc~	2012-06-12 10:16:58.006618054 +0200
++++ git/src/3rdparty/v8/src/profile-generator.cc	2012-06-12 10:41:40.603799952 +0200
+@@ -3582,9 +3582,9 @@ void HeapSnapshotJSONSerializer::Seriali
+   // The first (zero) item of nodes array is an object describing node
+   // serialization layout.  We use a set of macros to improve
+   // readability.
+-#define JSON_A(s) "["s"]"
+-#define JSON_O(s) "{"s"}"
+-#define JSON_S(s) "\""s"\""
++#define JSON_A(s) "[" s "]"
++#define JSON_O(s) "{" s "}"
++#define JSON_S(s) "\"" s "\""
+   writer_->AddString(JSON_O(
+     JSON_S("fields") ":" JSON_A(
+         JSON_S("type")
