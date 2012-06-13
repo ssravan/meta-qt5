@@ -2,7 +2,7 @@ DESCRIPTION = "SDK tools for Qt version 5.x"
 DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
-INC_PR = "r3"
+INC_PR = "r4"
 
 inherit nativesdk qmake2
 
@@ -10,13 +10,17 @@ require qt5_arch.inc
 QT_ARCH := "${@qt5_arch(d)}"
 QT_ENDIAN = "${@qt5_endian(d)}"
 
+SRC_URI += "file://0004-no-qmake.patch"
+
 QT_CONFIG_FLAGS += "\
     -reduce-relocations                         \
     -no-nis                                     \
     -release                                    \
-    -stl -no-rpath                              \
+    -no-rpath                                   \
     -no-xcb -no-wayland -no-opengl -no-eglfs    \
 "
+
+QT_DIR_NAME ?= "qt5"
 
 # yank default -e, otherwise we get the following error:
 # moc_qbuffer.cpp: No such file or directory
@@ -45,6 +49,11 @@ do_configure() {
     mkdir -p mkspecs/build-oe-g++
     cp -f ${WORKDIR}/qplatformdefs.h mkspecs/build-oe-g++
     bash ${WORKDIR}/qmake-build.conf.sh > mkspecs/build-oe-g++/qmake.conf
+
+    # Use qmake from qt5-native for building
+    if [ ! -e bin/qmake ]; then
+        ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 bin/qmake
+    fi
 
     ./configure -v \
         -opensource -confirm-license \
@@ -77,6 +86,9 @@ do_compile() {
     for i in bootstrap rcc moc uic; do
         oe_runmake -C src/tools/${i}
     done
+
+    # rebuild qmake
+    oe_runmake -C src/tools/${i}
 }
 
 do_install() {
