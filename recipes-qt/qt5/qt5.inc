@@ -133,6 +133,8 @@ RRECOMMENDS_${QT_BASE_NAME}-qmlviewer += " \
 RRECOMMENDS_${QT_BASE_NAME}-doc += " \
             ${QT_BASE_NAME}-demos-doc"
 
+PROVIDES = "qt5-tools-native"
+
 #FILES_${QT_BASE_NAME}-tools                = "${bindir}/qttracereplay"
 #FILES_${QT_BASE_NAME}-tools-dbg            = "${bindir}/.debug/qttracereplay ${bindir}/.debug/qdoc*"
 FILES_${QT_BASE_NAME}-assistant            = "${bindir}/*assistant* ${bindir}/qcollectiongenerator ${bindir}/qhelpconverter ${bindir}/qhelpgenerator"

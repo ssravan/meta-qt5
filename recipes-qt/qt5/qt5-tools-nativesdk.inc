@@ -1,8 +1,8 @@
 DESCRIPTION = "SDK tools for Qt version 5.x"
-DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk"
+DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
-INC_PR = "r4"
+INC_PR = "r5"
 
 inherit nativesdk qmake2
 
