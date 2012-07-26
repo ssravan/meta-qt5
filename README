@@ -1,0 +1,17 @@
+A layer for qt5 recipes.
+
+This layer depends on:
+
+URI: git://git.openembedded.org/openembedded-core
+layers: meta
+branch: master
+revision: HEAD
+
+URI: git://git.openembedded.org/meta-openembedded
+layers: toolchain-layer
+branch: master
+revision: HEAD
+
+This layer is a work in progress layer. If you wish to contribute, send a mail to:
+
+Maintainers: Martin Ertsaas <mertsas@cisco.com>
