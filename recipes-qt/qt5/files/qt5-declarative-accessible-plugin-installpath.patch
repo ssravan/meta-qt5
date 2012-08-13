@@ -1,0 +1,9 @@
+--- git/src/plugins/accessible/quick/quick.pro~	2012-08-02 09:05:59.249584712 +0100
++++ git/src/plugins/accessible/quick/quick.pro	2012-08-13 06:44:02.703647253 +0100
+@@ -1,5 +1,5 @@
+ TARGET  = qtaccessiblequick
+-DESTDIR = $$QT.gui.plugins/accessible
++#DESTDIR = $$QT.gui.plugins/accessible
+ 
+ load(qt_plugin)
+ include ($$PWD/../shared/qaccessiblebase.pri)

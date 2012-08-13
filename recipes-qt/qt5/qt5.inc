@@ -235,8 +235,10 @@ do_compile_prepend() {
     unset OBJDUMP
     unset CCLD
 
-    for i in bootstrap rcc moc uic; do
-        oe_runmake -C src/tools/${i}
+    oe_runmake sub-src-qmake_all
+    oe_runmake -C src/tools sub-tools-bootstrap-all
+    for i in rcc moc uic; do
+        oe_runmake -C src/tools sub-${i}
     done
 
     install -d ${STAGING_BINDIR_NATIVE}

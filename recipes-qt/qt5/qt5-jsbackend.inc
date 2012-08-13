@@ -23,17 +23,12 @@ do_configure () {
 
 do_compile () {
     QTDIR=${QMAKESPEC}/../.. qmake2
-
-    if ! grep -q 'config_test_hardfloat = yes' .qmake.cache; then
-        die "Hardfloat detection failed!"
-    fi
-
     oe_runmake
 }
 
 do_install_prepend() {
     pushd lib/cmake
-        for i in *; do
+    for i in *; do
         m=${i/Qt5/}
         sed -i \
             -e "s#${STAGING_DIR_TARGET}${includedir}/${QT_DIR_NAME}/#\${_qt5${m}_install_prefix}/include/${QT_DIR_NAME}/#g" \

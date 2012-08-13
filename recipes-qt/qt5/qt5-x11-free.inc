@@ -2,7 +2,7 @@ DESCRIPTION = "Qt is a cross-platform application framework"
 HOMEPAGE = "http://qt.nokia.com"
 SECTION = "x11/libs"
 
-INC_PR = "r4"
+INC_PR = "r5"
 
 DEPENDS += "virtual/libx11 \
              fontconfig libxft libxext libxrender libxrandr libxcursor \

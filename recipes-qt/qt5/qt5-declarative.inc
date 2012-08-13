@@ -36,6 +36,7 @@ FILES_${PN}-examples-dbg += "\
     /usr/local/${QT_DIR_NAME}/examples/*/*/*/.debug \
     /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/.debug \
     /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/*/.debug \
+    /usr/local/${QT_DIR_NAME}/examples/*/*/*/*/*/*/.debug \
 "
 
 do_configure () {
@@ -62,7 +63,7 @@ do_install_prepend() {
 }
 
 do_install() {
-    oe_runmake install INSTALL_ROOT="${D}"
+    oe_runmake INSTALL_ROOT="${D}" install
 }
 
 do_install_append() {

@@ -1,10 +1,12 @@
 require qt5-declarative.inc
 
-SRCREV = "ca6d49e6b4096f5a9737c6aee04e9b22a781aba2"
+SRCREV = "917a2cbc76a8433e550770b1414153ab16215381"
 SRC_URI += "git://gitorious.org/qt/qtdeclarative.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR_append = ".6"
+SRC_URI += "file://qt5-declarative-accessible-plugin-installpath.patch"
+
+PR_append = ".7"
 
 DEFAULT_PREFERENCE = "-1"
 
