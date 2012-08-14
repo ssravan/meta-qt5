@@ -17,7 +17,8 @@ QT_CONFIG_FLAGS += "\
     -no-nis                                     \
     -release                                    \
     -no-rpath                                   \
-    -no-xcb -no-wayland -no-opengl -no-eglfs    \
+    -no-xcb -no-opengl -no-eglfs		\
+    -no-qpa-platform-guard			\
 "
 
 QT_DIR_NAME ?= "qt5"
@@ -67,7 +68,6 @@ do_configure() {
         -translationdir ${datadir}/${QT_DIR_NAME}/translations \
         -platform ${TARGET_OS}-oe-g++              \
         -xplatform ${TARGET_OS}-oe-g++                 \
-        -arch ${QT_ARCH} \
         ${QT_CONFIG_FLAGS} -no-fast
 }
 
