@@ -2,7 +2,7 @@ DESCRIPTION = "SDK tools for Qt version 5.x"
 DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
-INC_PR = "r5"
+INC_PR = "r6"
 
 inherit nativesdk qmake2
 
@@ -56,6 +56,8 @@ do_configure() {
         ln -sf ${STAGING_BINDIR_NATIVE}/qmake2 bin/qmake
     fi
 
+    ln -sf ${TARGET_OS}-oe-g++ mkspecs/default
+
     ./configure -v \
         -opensource -confirm-license \
         -prefix ${prefix} \
@@ -83,12 +85,18 @@ do_compile() {
     unset OBJDUMP
     unset CCLD
 
-    for i in bootstrap rcc moc uic; do
-        oe_runmake -C src/tools/${i}
+    oe_runmake sub-src-qmake_all
+
+    oe_runmake -C src/tools sub-tools-bootstrap-all
+    for i in rcc moc uic; do
+        oe_runmake -C src/tools sub-${i}
     done
 
     # rebuild qmake
-    oe_runmake -C src/tools/${i}
+    pushd qmake
+    QMAKESPEC=../mkspecs/${TARGET_OS}-oe-g++ ../bin/qmake
+    oe_runmake 
+    popd
 }
 
 do_install() {
