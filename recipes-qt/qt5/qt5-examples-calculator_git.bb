@@ -9,30 +9,30 @@ SRCREV = "917a2cbc76a8433e550770b1414153ab16215381"
 SRC_URI = "git://gitorious.org/qt/qtdeclarative.git;protocol=git"
 S = "${WORKDIR}/git"
 
-PR = "r5"
+PR = "r6"
 
 FILES_${PN} += "\
-    /usr/local/qt5/examples/qtdeclarative/demos/calculator/calculator \
-    /usr/local/qt5/examples/qtdeclarative/demos/calculator/*.qml \
-    /usr/local/qt5/examples/qtdeclarative/demos/calculator/CalculatorCore \
+    /usr/local/qt5/examples/qtdeclarative/demos/calqlatr/calqlatr \
+    /usr/local/qt5/examples/qtdeclarative/demos/calqlatr/*.qml \
+    /usr/local/qt5/examples/qtdeclarative/demos/calqlatr/content \
 "
 
-FILES_${PN}-dbg += "/usr/local/qt5/examples/qtdeclarative/demos/calculator/.debug"
-FILES_${PN}-dev += "/usr/local/qt5/examples/qtdeclarative/demos/calculator"
+FILES_${PN}-dbg += "/usr/local/qt5/examples/qtdeclarative/demos/calqlatr/.debug"
+FILES_${PN}-dev += "/usr/local/qt5/examples/qtdeclarative/demos/calqlatr"
 
 do_configure () {
     :
 }
 
 do_compile () {
-    pushd examples/demos/calculator
+    pushd examples/demos/calqlatr
     qmake2
     oe_runmake
     popd
 }
 
 do_install() {
-    pushd examples/demos/calculator
+    pushd examples/demos/calqlatr
     oe_runmake install INSTALL_ROOT="${D}"
     popd
 }
