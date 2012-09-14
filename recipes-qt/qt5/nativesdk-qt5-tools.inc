@@ -1,5 +1,5 @@
 DESCRIPTION = "SDK tools for Qt version 5.x"
-DEPENDS = "zlib-nativesdk dbus-nativesdk libx11-nativesdk qt5-tools-native"
+DEPENDS = "nativesdk-zlib nativesdk-dbus nativesdk-libx11 qt5-tools-native"
 SECTION = "libs"
 HOMEPAGE = "http://qt.nokia.com"
 INC_PR = "r6"
